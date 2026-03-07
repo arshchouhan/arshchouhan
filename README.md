@@ -1,5 +1,5 @@
 <div align="center">
-  <video src="https://raw.githubusercontent.com/arshchouhan/arshchouhan/main/assets/intro.mp4" width="100%" autoplay loop muted playsinline></video>
+  <video src="assets/intro.mp4" width="100%" autoplay loop muted playsinline></video>
 
   <br/>
 
@@ -12,8 +12,6 @@
   <br/>
 
   <h1 align="center">Hi there! I'm Arsh Chouhan 👋</h1>
-  
-  <img src="assets/header.png" width="100%" alt="Developer Banner" />
   
   <br/>
 
