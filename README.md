@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=42&duration=3000&pause=1000&color=FFA500&center=true&vCenter=true&width=800&lines=Stay+Welcomes+You!" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:4facfe,100:00f2fe&height=200&section=header&text=Stay%20Welcomes%20You&fontSize=48&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Hello%20Explorers%20|%20Welcome%20to%20Arsh's%20Digital%20Universe&descAlignY=60&descAlign=50"/>
 
 </div>
 
@@ -9,28 +9,21 @@
 <table>
 <tr>
 
-<td width="50%" align="center">
+<td width="50%">
 
-<img src="./assets/intro.gif" width="100%" alt="Stay Welcome Animation"/>
+<img src="./assets/intro.gif" width="100%">
 
 </td>
 
 <td width="50%">
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Outfit&size=28&duration=3000&pause=1000&color=00C4FF&vCenter=true&width=500&lines=Hello+Explorers!;Welcome+to+Arsh's+Digital+Universe;Backend+%26+System+Design+Enthusiast;Cloud+Computing+Explorer;Competitive+Programmer;Full+Stack+Developer"/>
+<img src="https://readme-typing-svg.herokuapp.com?font=Outfit&size=28&duration=3000&pause=1000&color=4FACFE&vCenter=true&width=500&lines=Backend+%26+System+Design+Enthusiast;Cloud+Computing+Explorer;Competitive+Programmer;Full+Stack+Developer"/>
 
 <br>
 
 # Hi there! I'm Arsh Chouhan 👋
 
-I'm a passionate **Software Engineer** focused on building scalable systems and solving complex algorithmic challenges.
-
-Later you can add:
-
-- project highlights  
-- achievements  
-- quick introduction  
-- GitHub stats  
+I'm a passionate **Software Engineer** focused on building scalable systems, cloud architectures, and solving complex algorithmic challenges.
 
 </td>
 
@@ -42,9 +35,9 @@ Later you can add:
 # 🚀 About Me
 
 - 🔭 Currently working on **SheShield** and **Ment2Be**
-- 🌱 Learning **AWS and System Design**
+- 🌱 Learning **AWS & System Design**
 - 💬 Ask me about **DSA, React, Cloud Architecture**
-- ⚡ I enjoy **competitive programming and optimizing workflows**
+- ⚡ I enjoy **competitive programming**
 
 ---
 
@@ -83,7 +76,7 @@ Later you can add:
 
 <div align="center">
 
-<img src="https://github-readme-stats.vercel.app/api?username=arshchouhan&show_icons=true&theme=tokyonight&hide_border=true&count_private=true"/>
+<img src="https://github-readme-stats.vercel.app/api?username=arshchouhan&show_icons=true&theme=tokyonight&hide_border=true"/>
 
 <br>
 
@@ -104,3 +97,5 @@ Later you can add:
 [![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:arshchouhan004@gmail.com)
 
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/arshchouhan)
+
+---
