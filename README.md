@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/intro.gif" width="100%" alt="Stay Welcome Video" />
+  <img src="./assets/intro.gif" width="100%" alt="Stay Welcome Video" />
 
   <br/>
 
