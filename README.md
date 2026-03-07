@@ -8,7 +8,24 @@
 
 <div align="center">
 
-<img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=18&duration=1400&pause=200&color=3B82F6&center=true&vCenter=true&repeat=true&width=900&lines=████████████████████████████████████████████████████████████████████████████████████████"/>
+<svg width="900" height="6" viewBox="0 0 900 6" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+<linearGradient id="fadeLine" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="0%" stop-color="#3b82f6" stop-opacity="0"/>
+<stop offset="50%" stop-color="#3b82f6" stop-opacity="1"/>
+<stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+</linearGradient>
+</defs>
+
+<rect x="-200" y="2" width="200" height="2" fill="url(#fadeLine)">
+<animate attributeName="x"
+values="-200;900;-200"
+dur="4s"
+repeatCount="indefinite"/>
+</rect>
+
+</svg>
 
 </div>
 
@@ -57,21 +74,24 @@ Areas I focus on:
 
 # Tech Stack
 
-Languages  
+Languages
+
 C++  
 Python  
 JavaScript  
 Java  
 SQL  
 
-Frontend and Backend  
+Frontend and Backend
+
 React  
 Node.js  
 Express  
 Firebase  
 MongoDB  
 
-Tools and Infrastructure  
+Tools and Infrastructure
+
 AWS  
 Docker  
 Git  
