@@ -1,10 +1,9 @@
 <div align="center">
-  <video src="assets/intro.mp4" width="100%" autoplay loop muted playsinline></video>
+  <img src="assets/intro.gif" width="100%" alt="Stay Welcome Video" />
 
   <br/>
 
-  <h1>
-  Stay Welcomes You!</h1>
+  <h1>Stay Welcomes You!</h1>
   
   <p align="center">
     <i>"Hello Explorers! I'm <b>Stay</b>, and I'm here to welcome you to Arsh's digital universe. Grab your helmet, and let's explore!"</i>
