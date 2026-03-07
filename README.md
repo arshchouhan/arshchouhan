@@ -1,6 +1,6 @@
 # Hi there! I'm Arsh Chouhan 👋
 <div align="center">
-  <img src="assets/header.png" width="100%" alt="Developer Banner" />
+  <!-- <img src="assets/header.png" width="100%" alt="Developer Banner" /> -->
   
   <br/>
 
@@ -84,5 +84,5 @@ I'm a passionate **Software Engineer** dedicated to building robust backup syste
 <br/>
 
 <div align="center">
-  <sub>Built with ❤️ by [Antigravity](https://github.com/google-deepmind/antigravity)</sub>
+  <!-- <sub>Built with ❤️ by [Antigravity](https://github.com/google-deepmind/antigravity)</sub> -->
 </div>
