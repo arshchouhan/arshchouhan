@@ -1,5 +1,18 @@
-# Hi there! I'm Arsh Chouhan 👋
 <div align="center">
+  <video src="assets/intro.mp4" width="100%" autoplay loop muted playsinline style="border-radius: 12px;"></video>
+  
+  <br/>
+
+  <h1>👨‍🚀 Stay Welcomes You!</h1>
+  
+  <p align="center">
+    <i>"Hello Explorers! I'm <b>Stay</b>, and I'm here to welcome you to Arsh's digital universe. Grab your helmet, and let's explore!"</i>
+  </p>
+
+  <br/>
+
+  <h1 align="center">Hi there! I'm Arsh Chouhan 👋</h1>
+  
   <img src="assets/header.png" width="100%" alt="Developer Banner" />
   
   <br/>
