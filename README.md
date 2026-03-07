@@ -1,4 +1,4 @@
-# Hi there! I'm Arsh Chouhan 👋
+# Hi there! I'm Arsh Chouhan 
 Readme under development
 <div align="center">
   <!-- <img src="assets/header.png" width="100%" alt="Developer Banner" /> -->
@@ -12,17 +12,17 @@ Readme under development
 
 ---
 
-### 🚀 About Me
+###  About Me
 I'm a passionate **Software Engineer** dedicated to building robust backup systems, scalable cloud architectures, and solving complex algorithmic challenges. Currently, I'm focusing on deepening my expertise in distributed systems and cloud-native applications.
 
-- 🔭 I’m currently working on several projects like **SheShield** and **Ment2Be**.
-- 🌱 Learning more about **AWS & System Design patterns**.
-- 💬 Ask me about **DSA, React, or Cloud architecture**.
-- ⚡ Fun fact: I love diving into competitive programming and optimizing my workflow!
+- I’m currently working on several projects like **SheShield** and **Ment2Be**.
+- Learning more about **AWS & System Design patterns**.
+- Ask me about **DSA, React, or Cloud architecture**.
+- Fun fact: I love diving into competitive programming and optimizing my workflow!
 
 ---
 
-### 🛠️ Tech Stack & Skills
+### Tech Stack & Skills
 
 <div align="center">
   
@@ -56,7 +56,7 @@ I'm a passionate **Software Engineer** dedicated to building robust backup syste
 
 ---
 
-### 📊 GitHub Analytics
+### GitHub Analytics
 
 <div align="center">
   <img src="https://github-readme-stats.vercel.app/api?username=arshchouhan&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" alt="GitHub Stats" />
@@ -68,7 +68,7 @@ I'm a passionate **Software Engineer** dedicated to building robust backup syste
 
 ---
 
-### 📫 Connect With Me
+### Connect With Me
 
 <div align="center">
   <a href="https://linkedin.com/in/arshchouhan">
