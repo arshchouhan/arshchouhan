@@ -1,6 +1,6 @@
 <div align="center">
-  <video src="assets/intro.mp4" width="100%" autoplay loop muted playsinline style="border-radius: 12px;"></video>
-  
+  <video src="https://raw.githubusercontent.com/arshchouhan/arshchouhan/main/assets/intro.mp4" width="100%" autoplay loop muted playsinline></video>
+
   <br/>
 
   <h1>👨‍🚀 Stay Welcomes You!</h1>
