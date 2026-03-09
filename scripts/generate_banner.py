@@ -165,18 +165,29 @@ def generate_image(mode="dark"):
     
     text_y += line_height + 5
 
-    def draw_field(key, val, dots=5):
+    def draw_field(key, val):
         nonlocal text_y
         key_text = f"{key}: "
         draw.text((text_x, text_y), key_text, font=text_font, fill=config['key'])
         
-        # Fixed dots logic to prevent stretching
-        dot_count = max(2, dots - len(key))
-        dot_text = "." * dot_count
-        draw.text((text_x + draw.textlength(key_text, font=text_font), text_y), dot_text, font=text_font, fill=config['dot'])
-        
+        # Right boundary for the value
+        panel_right_x = card_x1 - 40
         val_text = str(val)
-        draw.text((text_x + draw.textlength(key_text + dot_text, font=text_font) + 5, text_y), val_text, font=text_font, fill=config['value'])
+        val_width = draw.textlength(val_text, font=text_font)
+        
+        # Draw value right-justified
+        draw.text((panel_right_x - val_width, text_y), val_text, font=text_font, fill=config['value'])
+        
+        # Fill with dots
+        key_width = draw.textlength(key_text, font=text_font)
+        dots_start_x = text_x + key_width
+        dots_end_x = panel_right_x - val_width - 10
+        
+        if dots_end_x > dots_start_x:
+            dot_w = draw.textlength(".", font=text_font)
+            dot_count = int((dots_end_x - dots_start_x) / dot_w)
+            draw.text((dots_start_x, text_y), "." * dot_count, font=text_font, fill=config['dot'])
+            
         text_y += line_height
 
     def draw_separator(label):
@@ -184,7 +195,17 @@ def generate_image(mode="dark"):
         text_y += 5
         label_text = f"- {label} "
         draw.text((text_x, text_y), label_text, font=text_font, fill=config['label'])
-        draw.text((text_x + draw.textlength(label_text, font=text_font), text_y), "-" * 35, font=text_font, fill=config['dot'])
+        
+        # Dynamic dashes to match the right-justified boundary
+        panel_right_x = card_x1 - 40
+        label_width = draw.textlength(label_text, font=text_font)
+        sep_start_x = text_x + label_width
+        sep_end_x = panel_right_x
+        
+        if sep_end_x > sep_start_x:
+            dash_w = draw.textlength("-", font=text_font)
+            dash_count = int((sep_end_x - sep_start_x) / dash_w)
+            draw.text((sep_start_x, text_y), "-" * dash_count, font=text_font, fill=config['dot'])
         text_y += line_height + 2
 
     # Fields
