@@ -170,18 +170,29 @@ def generate_image(mode="dark"):
     
     text_y += line_height + 5
 
-    def draw_field(key, val, dots=30):
+    def draw_field(key, val):
         nonlocal text_y
         key_text = f"{key}: "
         draw.text((text_x, text_y), key_text, font=image_font, fill=config['key'])
         
-        # Calculate dots
-        dot_count = max(2, dots - len(key))
-        dot_text = "." * dot_count
-        draw.text((text_x + draw.textlength(key_text, font=image_font), text_y), dot_text, font=image_font, fill=config['dot'])
+        content_right_margin = card_x1 - 40
+        val_text = str(val)
+        val_width = draw.textlength(val_text, font=image_font)
         
-        val_text = val
-        draw.text((text_x + draw.textlength(key_text + dot_text, font=image_font) + 5, text_y), val_text, font=image_font, fill=config['value'])
+        # Right justify the value
+        val_draw_x = content_right_margin - val_width
+        draw.text((val_draw_x, text_y), val_text, font=image_font, fill=config['value'])
+        
+        # Fill the gap with dots
+        key_width = draw.textlength(key_text, font=image_font)
+        dots_start_x = text_x + key_width
+        dots_end_x = val_draw_x - 10
+        
+        if dots_end_x > dots_start_x:
+            dot_w = draw.textlength(".", font=image_font)
+            dot_count = int((dots_end_x - dots_start_x) / dot_w)
+            draw.text((dots_start_x, text_y), "." * dot_count, font=image_font, fill=config['dot'])
+            
         text_y += line_height
 
     def draw_separator(label):
@@ -189,30 +200,38 @@ def generate_image(mode="dark"):
         text_y += 10
         label_text = f"- {label} "
         draw.text((text_x, text_y), label_text, font=image_font, fill=config['label'])
-        draw.text((text_x + draw.textlength(label_text, font=image_font), text_y), "-" * (100 - len(label_text)), font=image_font, fill=config['dot'])
+        
+        label_w = draw.textlength(label_text, font=image_font)
+        sep_start_x = text_x + label_w
+        sep_end_x = card_x1 - 40
+        
+        dash_w = draw.textlength("-", font=image_font)
+        if sep_end_x > sep_start_x:
+            dash_count = int((sep_end_x - sep_start_x) / dash_w)
+            draw.text((sep_start_x, text_y), "-" * dash_count, font=image_font, fill=config['dot'])
         text_y += line_height + 5
 
     # Fields
-    draw_field("OS", "Windows 11, Linux (WSL), Android 15", dots=22)
-    draw_field("Uptime", uptime, dots=22)
-    draw_field("Host", "127.0.0.0//Lovely Professional University", dots=22)
-    draw_field("Kernel", "Digital Explorer & Backend Enthusiast", dots=22)
-    draw_field("IDE", "VS Code, Cursor, Neovim", dots=22)
+    draw_field("OS", "Windows 11, Linux (WSL), Android 15")
+    draw_field("Uptime", uptime)
+    draw_field("Host", "127.0.0.0//Lovely Professional University")
+    draw_field("Kernel", "Digital Explorer & Backend Enthusiast")
+    draw_field("IDE", "VS Code, Cursor, Neovim")
     
     text_y += 5
-    draw_field("Languages.Programming", "C++, Python, JavaScript, Java, SQL", dots=2)
-    draw_field("Languages.Computer", "HTML, CSS, JSON, Markdown, YAML", dots=5)
-    draw_field("Languages.Real", "English, Hindi, Punjabi", dots=9)
+    draw_field("Languages.Programming", "C++, Python, JavaScript, Java, SQL")
+    draw_field("Languages.Computer", "HTML, CSS, JSON, Markdown, YAML")
+    draw_field("Languages.Real", "English, Hindi, Punjabi")
     
     text_y += 5
-    draw_field("Hobbies.Software", "Competitive Programming, Web Dev", dots=5)
-    draw_field("Hobbies.Hardware", "PC Building, Cloud Architecture", dots=5)
-
+    draw_field("Hobbies.Software", "Competitive Programming, Web Dev")
+    draw_field("Hobbies.Hardware", "PC Building, Cloud Architecture")
+    
     draw_separator("Contact")
-    draw_field("Email.Personal", "arshchouhan004@gmail.com", dots=10)
-    draw_field("LinkedIn", "linkedin.com/in/arshchouhan", dots=16)
-    draw_field("GitHub", "github.com/arshchouhan", dots=18)
-    draw_field("Status", "Building Scalable Systems", dots=18)
+    draw_field("Email.Personal", "arshchouhan004@gmail.com")
+    draw_field("LinkedIn", "linkedin.com/in/arshchouhan")
+    draw_field("GitHub", "github.com/arshchouhan")
+    draw_field("Status", "Building Scalable Systems")
 
     draw_separator("GitHub Stats")
     
