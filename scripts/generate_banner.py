@@ -241,8 +241,9 @@ def generate_image(mode="dark"):
     draw_separator("Contact")
     draw_field("Email.Personal", "arshchouhan004@gmail.com")
     draw_field("LinkedIn", "linkedin.com/in/arshchouhan")
-    draw_field("GitHub", "github.com/arshchouhan")
-    draw_field("Status", "Building Scalable Systems")
+    draw_field("Discord", "arsh_c")
+    draw_field("Twitter", "arshchouhan")
+    draw_field("LeetCode", "arshchouhan004")
 
     draw_separator("GitHub Stats")
     
