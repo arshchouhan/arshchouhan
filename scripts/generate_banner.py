@@ -235,14 +235,14 @@ def generate_image(mode="dark"):
     draw_field("Languages.Real", "English, Hindi, Pahadi")
     
     text_y += 5
-    draw_field("Hobbies.Software", "Competitive Programming, Web Dev")
+    draw_field("Hobbies.Software", "DSA, Web Dev")
     draw_field("Hobbies.Hardware", "PC Building, Cloud Architecture")
     
     draw_separator("Contact")
     draw_field("Email.Personal", "arshchouhan004@gmail.com")
     draw_field("LinkedIn", "linkedin.com/in/arshchouhan")
     draw_field("Discord", "arsh_c")
-    draw_field("Twitter", "arshchouhan")
+    draw_field("Twitter", "@ArshCho85958973")
     draw_field("LeetCode", "arshchouhan004")
 
     draw_separator("GitHub Stats")
