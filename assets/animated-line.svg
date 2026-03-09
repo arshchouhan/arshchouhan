@@ -1,0 +1,21 @@
+<svg width="1000" height="15" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes flow {
+      0% { transform: translateX(-300px); }
+      50% { transform: translateX(1000px); }
+      100% { transform: translateX(-300px); }
+    }
+    .glow-line {
+      animation: flow 4s ease-in-out infinite;
+    }
+  </style>
+  <rect width="1000" height="3" y="6" fill="#1e293b" rx="1.5" />
+  <rect class="glow-line" width="300" height="3" y="6" fill="url(#gradient)" rx="1.5" />
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="300" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3b82f6" stop-opacity="0" />
+      <stop offset="0.5" stop-color="#60a5fa" />
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+</svg>

@@ -8,19 +8,7 @@
 
 <div align="center">
 
-<svg width="100%" height="15" viewBox="0 0 1000 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1000" height="3" y="6" fill="#1e293b" rx="1.5" />
-  <rect x="0" y="6" width="300" height="3" fill="url(#gradientFlow)" rx="1.5">
-    <animate attributeName="x" from="-300" to="1000" dur="3s" repeatCount="indefinite" />
-  </rect>
-  <defs>
-    <linearGradient id="gradientFlow" x1="0" y1="0" x2="300" y2="0" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#3b82f6" stop-opacity="0" />
-      <stop offset="0.5" stop-color="#60a5fa" />
-      <stop offset="1" stop-color="#3b82f6" stop-opacity="0" />
-    </linearGradient>
-  </defs>
-</svg>
+<img src="./assets/animated-line.svg" width="100%">
 
 </div>
 
