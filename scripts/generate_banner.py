@@ -137,7 +137,7 @@ def generate_image(mode="dark"):
         text_font = ImageFont.load_default()
     else:
         ascii_font = ImageFont.truetype(font_path, 18)
-        text_font = ImageFont.truetype(font_path, 14)
+        text_font = ImageFont.truetype(font_path, 16)
 
     # Calculate image size
     img_width = 1100
@@ -183,8 +183,8 @@ def generate_image(mode="dark"):
         key_text = f"{key}: "
         draw.text((text_x, text_y), key_text, font=text_font, fill=config['key'])
         
-        # Right boundary for the value
-        panel_right_x = card_x1 - 40
+        # Right boundary for the value (Narrowed for shorter dots)
+        panel_right_x = text_x + 580
         val_text = str(val)
         val_width = draw.textlength(val_text, font=text_font)
         
@@ -209,8 +209,8 @@ def generate_image(mode="dark"):
         label_text = f"- {label} "
         draw.text((text_x, text_y), label_text, font=text_font, fill=config['label'])
         
-        # Dynamic dashes to match the right-justified boundary
-        panel_right_x = card_x1 - 40
+        # Dynamic dashes to match the narrowed boundary
+        panel_right_x = text_x + 580
         label_width = draw.textlength(label_text, font=text_font)
         sep_start_x = text_x + label_width
         sep_end_x = panel_right_x
