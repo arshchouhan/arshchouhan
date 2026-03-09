@@ -132,7 +132,7 @@ def generate_image(mode="dark"):
         image_font = ImageFont.truetype(font_path, 16)
 
     # Calculate image size
-    img_width = 1000
+    img_width = 1200
     img_height = 600
     img = Image.new('RGB', (img_width, img_height), color=config['bg'])
     draw = ImageDraw.Draw(img)
@@ -166,7 +166,7 @@ def generate_image(mode="dark"):
     # Header: arshchouhan
     head_text = GITHUB_USERNAME
     draw.text((text_x, text_y), head_text, font=image_font, fill=config['white'])
-    draw.text((text_x + draw.textlength(head_text, font=image_font) + 10, text_y), "-" * 40, font=image_font, fill=config['dot'])
+    draw.text((text_x + draw.textlength(head_text, font=image_font) + 10, text_y), "-" * 60, font=image_font, fill=config['dot'])
     
     text_y += line_height + 5
 
@@ -189,7 +189,7 @@ def generate_image(mode="dark"):
         text_y += 10
         label_text = f"- {label} "
         draw.text((text_x, text_y), label_text, font=image_font, fill=config['label'])
-        draw.text((text_x + draw.textlength(label_text, font=image_font), text_y), "-" * (48 - len(label_text)), font=image_font, fill=config['dot'])
+        draw.text((text_x + draw.textlength(label_text, font=image_font), text_y), "-" * (70 - len(label_text)), font=image_font, fill=config['dot'])
         text_y += line_height + 5
 
     # Fields
