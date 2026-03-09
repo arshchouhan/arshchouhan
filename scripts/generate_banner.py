@@ -225,7 +225,7 @@ def generate_image(mode="dark"):
     draw_field("OS", "Windows 11, Linux (WSL), Android 15")
     draw_field("Uptime", uptime)
     draw_field("Host", "127.0.0.0//Lovely Professional University")
-    draw_field("Kernel", "Digital Explorer & Backend Enthusiast")
+    draw_field("Kernel", "Distributed Systems Explorer | Software Engineering Core")
     draw_field("IDE", "VS Code, Cursor, Neovim")
     
     text_y += 5
