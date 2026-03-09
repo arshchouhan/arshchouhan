@@ -129,11 +129,11 @@ def generate_image(mode="dark"):
         except:
             image_font = ImageFont.load_default()
     else:
-        image_font = ImageFont.truetype(font_path, 18)
+        image_font = ImageFont.truetype(font_path, 14)
 
     # Calculate image size
     img_width = 1300
-    img_height = 700
+    img_height = 600
     img = Image.new('RGB', (img_width, img_height), color=config['bg'])
     draw = ImageDraw.Draw(img)
 
@@ -152,21 +152,21 @@ def generate_image(mode="dark"):
     )
 
     # Draw ASCII Art column (Inside card)
-    x_offset = card_x0 + 30
-    y_offset = card_y0 + 40
-    line_height = 24
+    x_offset = card_x0 + 20
+    y_offset = card_y0 + 30
+    line_height = 20
     
     for i, line in enumerate(ASCII_ART):
         draw.text((x_offset, y_offset + i * line_height), line, font=image_font, fill=config['value'])
 
     # Draw Information column
-    text_x = card_x0 + 480
-    text_y = card_y0 + 40
+    text_x = card_x0 + 380
+    text_y = card_y0 + 30
     
     # Header: arshchouhan
     head_text = GITHUB_USERNAME
     draw.text((text_x, text_y), head_text, font=image_font, fill=config['white'])
-    draw.text((text_x + draw.textlength(head_text, font=image_font) + 10, text_y), "-" * 60, font=image_font, fill=config['dot'])
+    draw.text((text_x + draw.textlength(head_text, font=image_font) + 10, text_y), "-" * 80, font=image_font, fill=config['dot'])
     
     text_y += line_height + 5
 
@@ -189,13 +189,13 @@ def generate_image(mode="dark"):
         text_y += 10
         label_text = f"- {label} "
         draw.text((text_x, text_y), label_text, font=image_font, fill=config['label'])
-        draw.text((text_x + draw.textlength(label_text, font=image_font), text_y), "-" * (70 - len(label_text)), font=image_font, fill=config['dot'])
+        draw.text((text_x + draw.textlength(label_text, font=image_font), text_y), "-" * (100 - len(label_text)), font=image_font, fill=config['dot'])
         text_y += line_height + 5
 
     # Fields
     draw_field("OS", "Windows 11, Linux (WSL), Android 15", dots=22)
     draw_field("Uptime", uptime, dots=22)
-    draw_field("Host", "arshchouhan/arshchouhan", dots=22)
+    draw_field("Host", "127.0.0.0//Lovely Professional University", dots=22)
     draw_field("Kernel", "Digital Explorer & Backend Enthusiast", dots=22)
     draw_field("IDE", "VS Code, Cursor, Neovim", dots=22)
     
