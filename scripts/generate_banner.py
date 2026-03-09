@@ -110,7 +110,7 @@ def image_to_ascii(image_path, width=45):
     chars = ["@", "%", "#", "*", "+", "=", "-", ":", "."]
     
     ascii_art = []
-    pixels = img.getdata()
+    pixels = list(img.getdata())
     for y in range(new_height):
         row = pixels[y * width : (y + 1) * width]
         line = "".join([chars[min(int(p / 256 * len(chars)), len(chars) - 1)] for p in row])
