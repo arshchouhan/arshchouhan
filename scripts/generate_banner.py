@@ -75,35 +75,48 @@ def get_uptime():
     diff = relativedelta(now, BIRTHDATE)
     return f"{diff.years} years, {diff.months} months, {diff.days} days"
 
-# --- ASCII Art ---
-# Based on the user's previous reference art
-ASCII_ART = [
-    "       g@M%@%%@N%Nw,,        ",
-    " ,M*` | ||*%gNM=]mM%g||%N,   ",
-    " p!``  ' ! |``` ```|||jhlj%w ",
-    " ,@L     ,,       '''|j%M]%M ",
-    "jj'` .,wp@pw,        ''''|%Wg",
-    "/ { | | ]@@@@@@@@@@pp.      |||||",
-    "  ' ]@@@@@@@@@@@@@@p  ,    , ",
-    ", : ]%%@@@@@%%%%k%h ' * | | mkr  *",
-    "  j%M`      |jkk'  ~nrn=|i  ;  ",
-    "  ! jrr*^`         `~\"! L' ': !",
-    "   j lp;;, ./ @@  , ;\nmy \" ,~   ",
-    " i r @@ @mmHM @@@@ `^****M*,p ;",
-    " | ]@@@HHH]g@M%%%%H,jmgpmb% j  ",
-    " ;;%%%k%k@[,,n|:.;j%%k|k%%', [ ",
-    "  H|%%k%%j%k||,;;J!!'|%ij}]@   ",
-    "  \"djjmkL,\"]] [,,,wwxw;#kjk`  ",
-    "   %;%km%%%%M|%%jkkii|||[      ",
-    "    kjj%%kkk!||||||j|||\"       ",
-    "     |jm%H@@b%%kkmk%i!!, [     ",
-    "      @p|j%%%jkk|||j*``;j [    ",
-    "       ]@ @@g|        ,,;j%k   ",
-    "       @@@@@mgmp;,,,::;jj%%k%  ",
-    "       @@@@@@@@%%kgki!|jjjj%k%@ ",
-    "  ^[' %@@@HH%b%k{illljkjj%%%% ; `,",
-    "=[ '  .%HH%%%%%H@gkilljjj%k%\".    'i"
-]
+# --- ASCII Art Generation ---
+def image_to_ascii(image_path, width=45):
+    if not os.path.exists(image_path):
+        return [" [ Image Not Found ] "] * 20
+
+    try:
+        img = Image.open(image_path)
+    except Exception as e:
+        print(f"Error opening image: {e}")
+        return [" [ Error Loading Image ] "] * 20
+
+    # Convert to grayscale
+    img = img.convert("L")
+
+    # Crop to square to focus on the face (assuming it's centered)
+    w, h = img.size
+    min_dim = min(w, h)
+    left = (w - min_dim) // 2
+    top = (h - min_dim) // 2
+    img = img.crop((left, top, left + min_dim, top + min_dim))
+
+    # Resize for ASCII width
+    # 1:1 square crop becomes 0.5 height ratio in ASCII due to character dimensions
+    new_height = int(width * 0.5)
+    
+    # Cap height to avoid overly long banners
+    if new_height > 25:
+        new_height = 25
+    
+    img = img.resize((width, new_height), Image.Resampling.LANCZOS)
+
+    # Characters from darkest to lightest
+    chars = ["@", "%", "#", "*", "+", "=", "-", ":", "."]
+    
+    ascii_art = []
+    pixels = img.getdata()
+    for y in range(new_height):
+        row = pixels[y * width : (y + 1) * width]
+        line = "".join([chars[min(int(p / 256 * len(chars)), len(chars) - 1)] for p in row])
+        ascii_art.append(line)
+        
+    return ascii_art
 
 # --- Image Generation ---
 def generate_image(mode="dark"):
@@ -137,7 +150,10 @@ def generate_image(mode="dark"):
     y_offset = 30
     line_height = 20
     
-    for i, line in enumerate(ASCII_ART):
+    profile_path = "assets/profile.png"
+    ascii_lines = image_to_ascii(profile_path, width=40)
+    
+    for i, line in enumerate(ascii_lines):
         draw.text((x_offset, y_offset + i * line_height), line, font=image_font, fill=config['value'])
 
     # Draw Information column
