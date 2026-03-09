@@ -129,11 +129,11 @@ def generate_image(mode="dark"):
         except:
             image_font = ImageFont.load_default()
     else:
-        image_font = ImageFont.truetype(font_path, 24)
+        image_font = ImageFont.truetype(font_path, 22)
 
     # Calculate image size
     img_width = 1300
-    img_height = 950
+    img_height = 850
     img = Image.new('RGB', (img_width, img_height), color=config['bg'])
     draw = ImageDraw.Draw(img)
 
@@ -154,13 +154,13 @@ def generate_image(mode="dark"):
     # Draw ASCII Art column (Inside card)
     x_offset = card_x0 + 30
     y_offset = card_y0 + 40
-    line_height = 32
+    line_height = 28
     
     for i, line in enumerate(ASCII_ART):
         draw.text((x_offset, y_offset + i * line_height), line, font=image_font, fill=config['value'])
 
     # Draw Information column
-    text_x = card_x0 + 550
+    text_x = card_x0 + 530
     text_y = card_y0 + 40
     
     # Header: arshchouhan
