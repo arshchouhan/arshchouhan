@@ -33,16 +33,15 @@ repeatCount="indefinite"/>
 
 <div align="center">
 
-<div style="display: inline-block; width: 400px; vertical-align: top; text-align: left;">
-  <img src="./assets/intro.gif" width="380">
-</div>
-<div style="display: inline-block; width: 450px; vertical-align: top; text-align: left;">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Outfit&size=28&duration=3000&pause=1000&color=4FACFE&vCenter=true&width=500&lines=Backend+and+System+Design+Enthusiast;Cloud+Computing+Explorer;Competitive+Programmer;Full+Stack+Developer"/>
-  
-  # Hi there! I'm Arsh Chouhan
-  
-  I am a passionate software engineer focused on building scalable systems, cloud architectures, and solving complex algorithmic challenges.
-</div>
+<img src="./assets/intro.gif" width="100%">
+
+<br><br>
+
+<img src="https://readme-typing-svg.herokuapp.com?font=Outfit&size=28&duration=3000&pause=1000&color=4FACFE&vCenter=true&width=500&lines=Backend+and+System+Design+Enthusiast;Cloud+Computing+Explorer;Competitive+Programmer;Full+Stack+Developer"/>
+
+# Hi there! I'm Arsh Chouhan
+
+I am a passionate software engineer focused on building scalable systems, cloud architectures, and solving complex algorithmic challenges.
 
 </div>
 
