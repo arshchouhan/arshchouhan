@@ -129,11 +129,11 @@ def generate_image(mode="dark"):
         except:
             image_font = ImageFont.load_default()
     else:
-        image_font = ImageFont.truetype(font_path, 14)
+        image_font = ImageFont.truetype(font_path, 18)
 
     # Calculate image size
     img_width = 1300
-    img_height = 600
+    img_height = 800
     img = Image.new('RGB', (img_width, img_height), color=config['bg'])
     draw = ImageDraw.Draw(img)
 
@@ -160,39 +160,28 @@ def generate_image(mode="dark"):
         draw.text((x_offset, y_offset + i * line_height), line, font=image_font, fill=config['value'])
 
     # Draw Information column
-    text_x = card_x0 + 380
+    text_x = card_x0 + 450
     text_y = card_y0 + 30
     
     # Header: arshchouhan
     head_text = GITHUB_USERNAME
     draw.text((text_x, text_y), head_text, font=image_font, fill=config['white'])
-    draw.text((text_x + draw.textlength(head_text, font=image_font) + 10, text_y), "-" * 80, font=image_font, fill=config['dot'])
+    draw.text((text_x + draw.textlength(head_text, font=image_font) + 10, text_y), "-" * 40, font=image_font, fill=config['dot'])
     
     text_y += line_height + 5
 
-    def draw_field(key, val):
+    def draw_field(key, val, dots=15):
         nonlocal text_y
         key_text = f"{key}: "
         draw.text((text_x, text_y), key_text, font=image_font, fill=config['key'])
         
-        content_right_margin = card_x1 - 40
+        # Fixed dots logic to prevent stretching
+        dot_count = max(2, dots - len(key))
+        dot_text = "." * dot_count
+        draw.text((text_x + draw.textlength(key_text, font=image_font), text_y), dot_text, font=image_font, fill=config['dot'])
+        
         val_text = str(val)
-        val_width = draw.textlength(val_text, font=image_font)
-        
-        # Right justify the value
-        val_draw_x = content_right_margin - val_width
-        draw.text((val_draw_x, text_y), val_text, font=image_font, fill=config['value'])
-        
-        # Fill the gap with dots
-        key_width = draw.textlength(key_text, font=image_font)
-        dots_start_x = text_x + key_width
-        dots_end_x = val_draw_x - 10
-        
-        if dots_end_x > dots_start_x:
-            dot_w = draw.textlength(".", font=image_font)
-            dot_count = int((dots_end_x - dots_start_x) / dot_w)
-            draw.text((dots_start_x, text_y), "." * dot_count, font=image_font, fill=config['dot'])
-            
+        draw.text((text_x + draw.textlength(key_text + dot_text, font=image_font) + 5, text_y), val_text, font=image_font, fill=config['value'])
         text_y += line_height
 
     def draw_separator(label):
@@ -200,15 +189,7 @@ def generate_image(mode="dark"):
         text_y += 10
         label_text = f"- {label} "
         draw.text((text_x, text_y), label_text, font=image_font, fill=config['label'])
-        
-        label_w = draw.textlength(label_text, font=image_font)
-        sep_start_x = text_x + label_w
-        sep_end_x = card_x1 - 40
-        
-        dash_w = draw.textlength("-", font=image_font)
-        if sep_end_x > sep_start_x:
-            dash_count = int((sep_end_x - sep_start_x) / dash_w)
-            draw.text((sep_start_x, text_y), "-" * dash_count, font=image_font, fill=config['dot'])
+        draw.text((text_x + draw.textlength(label_text, font=image_font), text_y), "-" * 40, font=image_font, fill=config['dot'])
         text_y += line_height + 5
 
     # Fields
