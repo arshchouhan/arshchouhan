@@ -7,7 +7,7 @@ import sys
 
 # --- Configuration ---
 GITHUB_USERNAME = "arshchouhan"
-BIRTHDATE = datetime.datetime(2004, 1, 1) # Edit this to your actual birthdate
+BIRTHDATE = datetime.datetime(2004, 6, 24) # Born on 24 June 2004
 LOC_API_URL = f"https://api.codetabs.com/v1/loc?github={GITHUB_USERNAME}"
 GITHUB_TOKEN = os.environ.get("GH_TOKEN") # Will be provided by GitHub Actions
 
