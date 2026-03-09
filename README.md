@@ -8,17 +8,15 @@
 
 </div>
 
----
-
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:3b82f6,100:06b6d4&height=120&section=header&text=Stay%20Welcomes%20You&fontSize=36&fontColor=ffffff&animation=fadeIn&fontAlignY=40&desc=Hello%20Explorers%20|%20Welcome%20to%20Arsh's%20Digital%20Universe&descAlignY=70"/>
+<img src="./assets/animated-line.svg" width="100%">
 
 </div>
 
 <div align="center">
 
-<img src="./assets/animated-line.svg" width="100%">
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:3b82f6,100:06b6d4&height=120&section=header&text=Stay%20Welcomes%20You&fontSize=36&fontColor=ffffff&animation=fadeIn&fontAlignY=40&desc=Hello%20Explorers%20|%20Welcome%20to%20Arsh's%20Digital%20Universe&descAlignY=70"/>
 
 </div>
 
