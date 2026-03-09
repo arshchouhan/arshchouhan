@@ -1,10 +1,57 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:3b82f6,100:06b6d4&height=120&section=header&text=Stay%20Welcomes%20You&fontSize=36&fontColor=ffffff&animation=fadeIn&fontAlignY=40&desc=Hello%20Explorers%20|%20Welcome%20to%20Arsh's%20Digital%20Universe&descAlignY=70"/>
+<table>
+<tr>
+<td align="left">
+<pre>
+       <b>_..._</b>
+     <b>.'     '.</b>
+    <b>/   _   _ \</b>
+    <b>|  (o) (o) |</b>
+    <b>|    _ _   |</b>
+     <b>\  \_/   /</b>
+      <b>'.___.'</b>
+      <b>/     \</b>
+     <b>/  / \  \</b>
+    <b>/  /   \  \</b>
+    <b>\_/     \_/</b>
+</pre>
+</td>
+<td align="left">
+<pre>
+<b>arsh@chouhan</b>
+--------------------------------------------------
+<b>OS</b>: Windows 11
+<b>Host</b>: Profile Repository
+<b>Kernel</b>: Digital Explorer
+<b>IDE</b>: VS Code / Cursor
+
+<b>Languages.Programming</b>: C++, Python, JavaScript, Java, SQL
+<b>Languages.Backend</b>....: Node.js, Express, Firebase, MongoDB
+<b>Cloud.Infra</b>........: AWS, Docker, Git
+
+- Contact ----------------------------------------
+<b>LinkedIn</b>...........: linkedin.com/in/arshchouhan
+<b>Email</b>..............: arshchouhan004@gmail.com
+<b>Location</b>...........: Global Explorer
+
+- GitHub Stats -----------------------------------
+<b>Status</b>.............: Building Scalable Architecture
+<b>Interests</b>..........: Backend & System Design
+</pre>
+</td>
+</tr>
+</table>
 
 </div>
 
+---
 
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:3b82f6,100:06b6d4&height=120&section=header&text=Stay%20Welcomes%20You&fontSize=36&fontColor=ffffff&animation=fadeIn&fontAlignY=40&desc=Hello%20Explorers%20|%20Welcome%20to%20Arsh's%20Digital%20Universe&descAlignY=70"/>
+
+</div>
 
 <div align="center">
 
