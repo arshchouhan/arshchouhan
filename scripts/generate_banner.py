@@ -117,19 +117,14 @@ def generate_image(mode="dark"):
     uptime = get_uptime()
     config = COLORS_DARK if mode == "dark" else COLORS_LIGHT
     
-    # Setup fonts (Using JetBrains Mono or similar)
-    # Note: On GitHub Runner, we might need a specific path or download the font
+    # Setup fonts
     font_path = "scripts/JetBrainsMono-Bold.ttf"
     if not os.path.exists(font_path):
-        # Fallback to default if font doesn't exist, but we should download it in the workflow
-        print("Font not found, using default (might look bad)")
-        font_size = 14
-        try:
-            image_font = ImageFont.truetype("arial.ttf", font_size)
-        except:
-            image_font = ImageFont.load_default()
+        ascii_font = ImageFont.load_default()
+        text_font = ImageFont.load_default()
     else:
-        image_font = ImageFont.truetype(font_path, 18)
+        ascii_font = ImageFont.truetype(font_path, 24)
+        text_font = ImageFont.truetype(font_path, 18)
 
     # Calculate image size
     img_width = 1300
@@ -154,42 +149,42 @@ def generate_image(mode="dark"):
     # Draw ASCII Art column (Inside card)
     x_offset = card_x0 + 20
     y_offset = card_y0 + 30
-    line_height = 20
+    line_height = 26
     
     for i, line in enumerate(ASCII_ART):
-        draw.text((x_offset, y_offset + i * line_height), line, font=image_font, fill=config['value'])
+        draw.text((x_offset, y_offset + i * line_height), line, font=ascii_font, fill=config['value'])
 
     # Draw Information column
-    text_x = card_x0 + 450
-    text_y = card_y0 + 30
+    text_x = card_x0 + 550
+    text_y = card_y0 + 35
     
     # Header: arshchouhan
     head_text = GITHUB_USERNAME
-    draw.text((text_x, text_y), head_text, font=image_font, fill=config['white'])
-    draw.text((text_x + draw.textlength(head_text, font=image_font) + 10, text_y), "-" * 40, font=image_font, fill=config['dot'])
+    draw.text((text_x, text_y), head_text, font=text_font, fill=config['white'])
+    draw.text((text_x + draw.textlength(head_text, font=text_font) + 10, text_y), "-" * 30, font=text_font, fill=config['dot'])
     
     text_y += line_height + 5
 
-    def draw_field(key, val, dots=15):
+    def draw_field(key, val, dots=5):
         nonlocal text_y
         key_text = f"{key}: "
-        draw.text((text_x, text_y), key_text, font=image_font, fill=config['key'])
+        draw.text((text_x, text_y), key_text, font=text_font, fill=config['key'])
         
         # Fixed dots logic to prevent stretching
         dot_count = max(2, dots - len(key))
         dot_text = "." * dot_count
-        draw.text((text_x + draw.textlength(key_text, font=image_font), text_y), dot_text, font=image_font, fill=config['dot'])
+        draw.text((text_x + draw.textlength(key_text, font=text_font), text_y), dot_text, font=text_font, fill=config['dot'])
         
         val_text = str(val)
-        draw.text((text_x + draw.textlength(key_text + dot_text, font=image_font) + 5, text_y), val_text, font=image_font, fill=config['value'])
+        draw.text((text_x + draw.textlength(key_text + dot_text, font=text_font) + 5, text_y), val_text, font=text_font, fill=config['value'])
         text_y += line_height
 
     def draw_separator(label):
         nonlocal text_y
         text_y += 10
         label_text = f"- {label} "
-        draw.text((text_x, text_y), label_text, font=image_font, fill=config['label'])
-        draw.text((text_x + draw.textlength(label_text, font=image_font), text_y), "-" * 40, font=image_font, fill=config['dot'])
+        draw.text((text_x, text_y), label_text, font=text_font, fill=config['label'])
+        draw.text((text_x + draw.textlength(label_text, font=text_font), text_y), "-" * 30, font=text_font, fill=config['dot'])
         text_y += line_height + 5
 
     # Fields
@@ -218,15 +213,15 @@ def generate_image(mode="dark"):
     
     # Custom Github format: Repos: 40 {Contributed: 5} | Stars: 100
     repo_line = f"Repos: {stats['public_repos']} {{Contributed: 5+}} | Stars: {stats['stars']}"
-    draw.text((text_x, text_y), repo_line, font=image_font, fill=config['key'])
+    draw.text((text_x, text_y), repo_line, font=text_font, fill=config['key'])
     text_y += line_height
     
     commit_line = f"Commits: {stats['commits']} | Followers: {stats['followers']}"
-    draw.text((text_x, text_y), commit_line, font=image_font, fill=config['key'])
+    draw.text((text_x, text_y), commit_line, font=text_font, fill=config['key'])
     text_y += line_height
     
     loc_line = f"Lines of Code on GitHub: {stats['loc']}"
-    draw.text((text_x, text_y), loc_line, font=image_font, fill=config['key'])
+    draw.text((text_x, text_y), loc_line, font=text_font, fill=config['key'])
 
     # Save
     output_path = f"assets/banner-{mode}.png"
