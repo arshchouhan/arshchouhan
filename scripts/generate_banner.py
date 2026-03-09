@@ -138,7 +138,7 @@ def generate_image(mode="dark"):
     draw = ImageDraw.Draw(img)
 
     # Draw Card Background with Padding
-    padding = 30
+    padding = 10
     card_x0, card_y0 = padding, padding
     card_x1, card_y1 = img_width - padding, img_height - padding
     
