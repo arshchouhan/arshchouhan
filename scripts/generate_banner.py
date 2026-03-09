@@ -75,50 +75,35 @@ def get_uptime():
     diff = relativedelta(now, BIRTHDATE)
     return f"{diff.years} years, {diff.months} months, {diff.days} days"
 
-# --- ASCII Art Generation ---
-def image_to_ascii(image_path, width=45):
-    if not os.path.exists(image_path):
-        return [" [ Image Not Found ] "] * 20
-
-    try:
-        img = Image.open(image_path)
-    except Exception as e:
-        print(f"Error opening image: {e}")
-        return [" [ Error Loading Image ] "] * 20
-
-    # Convert to grayscale
-    img = img.convert("L")
-
-    # Zoom in on the face (tighter crop, shifted up)
-    w, h = img.size
-    crop_size = int(min(w, h) * 0.5)  # Zoom in significantly (50% of image size)
-    left = (w - crop_size) // 2
-    top = int(h * 0.08)               # Start higher up to catch the face
-    img = img.crop((left, top, left + crop_size, top + crop_size))
-
-    # Enhance contrast for better face details
-    from PIL import ImageEnhance
-    enhancer = ImageEnhance.Contrast(img)
-    img = enhancer.enhance(1.5)
-
-    # Resize for ASCII
-    new_height = int(width * 0.5)
-    if new_height > 25:
-        new_height = 25
-    
-    img = img.resize((width, new_height), Image.Resampling.LANCZOS)
-
-    # Characters from darkest to lightest
-    chars = ["@", "%", "#", "*", "+", "=", "-", ":", "."]
-    
-    ascii_art = []
-    pixels = list(img.getdata())
-    for y in range(new_height):
-        row = pixels[y * width : (y + 1) * width]
-        line = "".join([chars[min(int(p / 256 * len(chars)), len(chars) - 1)] for p in row])
-        ascii_art.append(line)
-        
-    return ascii_art
+# --- ASCII Art ---
+# Based on the user's previous reference art
+ASCII_ART = [
+    "       g@M%@%%@N%Nw,,        ",
+    " ,M*` | ||*%gNM=]mM%g||%N,   ",
+    " p!``  ' ! |``` ```|||jhlj%w ",
+    " ,@L     ,,       '''|j%M]%M ",
+    "jj'` .,wp@pw,        ''''|%Wg",
+    "/ { | | ]@@@@@@@@@@pp.      |||||",
+    "  ' ]@@@@@@@@@@@@@@p  ,    , ",
+    ", : ]%%@@@@@%%%%k%h ' * | | mkr  *",
+    "  j%M`      |jkk'  ~nrn=|i  ;  ",
+    "  ! jrr*^`         `~\"! L' ': !",
+    "   j lp;;, ./ @@  , ;\nmy \" ,~   ",
+    " i r @@ @mmHM @@@@ `^****M*,p ;",
+    " | ]@@@HHH]g@M%%%%H,jmgpmb% j  ",
+    " ;;%%%k%k@[,,n|:.;j%%k|k%%', [ ",
+    "  H|%%k%%j%k||,;;J!!'|%ij}]@   ",
+    "  \"djjmkL,\"]] [,,,wwxw;#kjk`  ",
+    "   %;%km%%%%M|%%jkkii|||[      ",
+    "    kjj%%kkk!||||||j|||\"       ",
+    "     |jm%H@@b%%kkmk%i!!, [     ",
+    "      @p|j%%%jkk|||j*``;j [    ",
+    "       ]@ @@g|        ,,;j%k   ",
+    "       @@@@@mgmp;,,,::;jj%%k%  ",
+    "       @@@@@@@@%%kgki!|jjjj%k%@ ",
+    "  ^[' %@@@HH%b%k{illljkjj%%%% ; `,",
+    "=[ '  .%HH%%%%%H@gkilljjj%k%\".    'i"
+]
 
 # --- Image Generation ---
 def generate_image(mode="dark"):
@@ -152,10 +137,7 @@ def generate_image(mode="dark"):
     y_offset = 30
     line_height = 20
     
-    profile_path = "assets/profile.png"
-    ascii_lines = image_to_ascii(profile_path, width=40)
-    
-    for i, line in enumerate(ascii_lines):
+    for i, line in enumerate(ASCII_ART):
         draw.text((x_offset, y_offset + i * line_height), line, font=image_font, fill=config['value'])
 
     # Draw Information column
