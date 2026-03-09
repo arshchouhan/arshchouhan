@@ -39,9 +39,10 @@ COLORS_LIGHT = {
 }
 
 # --- Data Fetching ---
-# --- Data Fetching ---
 def fetch_github_stats():
-    headers = {}
+    headers = {
+        "Accept": "application/vnd.github.v3+json"
+    }
     if GITHUB_TOKEN:
         headers["Authorization"] = f"token {GITHUB_TOKEN}"
     
@@ -49,12 +50,12 @@ def fetch_github_stats():
     followers = 0
     public_repos = 0
     stars = 0
-    total_commits = "1,200+" # Placeholder
-    loc_str = "Unknown"
+    total_commits = "Unknown"
+    loc_str = "Zero (No Repos)"
 
     # Get user info
     try:
-        resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}", headers=headers)
+        resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}", headers=headers, timeout=10)
         if resp.status_code == 200:
             user_data = resp.json()
             followers = user_data.get("followers", 0)
@@ -64,20 +65,31 @@ def fetch_github_stats():
 
     # Get repos for stars
     try:
-        resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100", headers=headers)
+        resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100", headers=headers, timeout=10)
         if resp.status_code == 200:
             repos = resp.json()
             stars = sum(repo.get("stargazers_count", 0) for repo in repos)
     except Exception as e:
         print(f"Error fetching repo data: {e}")
 
+    # Get dynamic commit count via Search API
+    try:
+        # q=author:arshchouhan
+        commit_resp = requests.get(f"https://api.github.com/search/commits?q=author:{GITHUB_USERNAME}", headers=headers, timeout=10)
+        if commit_resp.status_code == 200:
+            commit_data = commit_resp.json()
+            total_commits = f"{commit_data.get('total_count', 0):,}"
+    except Exception as e:
+        print(f"Error fetching commit data: {e}")
+
     # Get LOC (Lines of Code)
     try:
-        resp = requests.get(LOC_API_URL, timeout=10)
+        resp = requests.get(LOC_API_URL, timeout=15)
         if resp.status_code == 200:
             loc_data = resp.json()
-            total_loc = sum(item.get("linesOfCode", 0) for item in loc_data)
-            loc_str = f"{total_loc:,}"
+            if isinstance(loc_data, list):
+                total_loc = sum(item.get("linesOfCode", 0) for item in loc_data)
+                loc_str = f"{total_loc:,}"
     except Exception as e:
         print(f"Error fetching LOC data: {e}")
 
