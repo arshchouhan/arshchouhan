@@ -215,10 +215,17 @@ def generate_image(mode="dark"):
     text_x = card_x0 + 420
     text_y = card_y0 + 50
     
-    # Header: arshchouhan
-    head_text = GITHUB_USERNAME
+    # Header: arshchouhan with solid divider
+    head_text = f"{GITHUB_USERNAME} "
     draw.text((text_x, text_y), head_text, font=text_font, fill=config['white'])
-    draw.text((text_x + draw.textlength(head_text, font=text_font) + 10, text_y), "-" * 30, font=text_font, fill=config['dot'])
+    
+    panel_right_x = text_x + 580
+    head_lx = text_x + draw.textlength(head_text, font=text_font)
+    
+    if panel_right_x > head_lx:
+        dash_w = draw.textlength("─", font=text_font)
+        dash_count = int((panel_right_x - head_lx) / dash_w)
+        draw.text((head_lx, text_y), "─" * dash_count, font=text_font, fill=config['dot'])
     
     text_y += line_height + 5
 
@@ -250,19 +257,18 @@ def generate_image(mode="dark"):
     def draw_separator(label):
         nonlocal text_y
         text_y += 5
-        label_text = f"- {label} "
+        label_text = f"─ {label} "
         draw.text((text_x, text_y), label_text, font=text_font, fill=config['label'])
         
-        # Dynamic dashes to match the narrowed boundary
-        panel_right_x = text_x + 580
+        # Solid horizontal line to match the layout
         label_width = draw.textlength(label_text, font=text_font)
         sep_start_x = text_x + label_width
         sep_end_x = panel_right_x
         
         if sep_end_x > sep_start_x:
-            dash_w = draw.textlength("-", font=text_font)
+            dash_w = draw.textlength("─", font=text_font)
             dash_count = int((sep_end_x - sep_start_x) / dash_w)
-            draw.text((sep_start_x, text_y), "-" * dash_count, font=text_font, fill=config['dot'])
+            draw.text((sep_start_x, text_y), "─" * dash_count, font=text_font, fill=config['dot'])
         text_y += line_height + 2
 
     # Fields
