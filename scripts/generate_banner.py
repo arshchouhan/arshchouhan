@@ -20,7 +20,9 @@ COLORS_DARK = {
     'bracket': '#8b949e',
     'dot': '#30363d',
     'host': '#3fb950', # Green for name@host
-    'white': '#ffffff'
+    'white': '#ffffff',
+    'card_bg': '#161b22', # Slightly lighter dark for card
+    'border': '#30363d'
 }
 
 COLORS_LIGHT = {
@@ -31,7 +33,9 @@ COLORS_LIGHT = {
     'bracket': '#57606a',
     'dot': '#d0d7de',
     'host': '#1a7f37',
-    'white': '#24292f' # Using dark color for "white" in light mode for readability
+    'white': '#24292f', # Using dark color for "white" in light mode for readability
+    'card_bg': '#f6f8fa', # Very light grey for card
+    'border': '#d0d7de'
 }
 
 # --- Data Fetching ---
@@ -128,23 +132,36 @@ def generate_image(mode="dark"):
         image_font = ImageFont.truetype(font_path, 16)
 
     # Calculate image size
-    # Width roughly 900px, height enough for ASCII and text
-    img_width = 950
-    img_height = 550
+    img_width = 1000
+    img_height = 600
     img = Image.new('RGB', (img_width, img_height), color=config['bg'])
     draw = ImageDraw.Draw(img)
 
-    # Draw ASCII Art column
-    x_offset = 20
-    y_offset = 30
+    # Draw Card Background with Padding
+    padding = 30
+    card_x0, card_y0 = padding, padding
+    card_x1, card_y1 = img_width - padding, img_height - padding
+    
+    # Draw rounded card
+    draw.rounded_rectangle(
+        [card_x0, card_y0, card_x1, card_y1], 
+        radius=15, 
+        fill=config['card_bg'], 
+        outline=config['border'], 
+        width=1
+    )
+
+    # Draw ASCII Art column (Inside card)
+    x_offset = card_x0 + 30
+    y_offset = card_y0 + 40
     line_height = 20
     
     for i, line in enumerate(ASCII_ART):
         draw.text((x_offset, y_offset + i * line_height), line, font=image_font, fill=config['value'])
 
     # Draw Information column
-    text_x = 420
-    text_y = 30
+    text_x = card_x0 + 430
+    text_y = card_y0 + 40
     
     # Header: arshchouhan
     head_text = GITHUB_USERNAME
