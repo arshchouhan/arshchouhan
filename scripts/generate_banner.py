@@ -226,12 +226,13 @@ def generate_image(mode="dark"):
     draw_field("Uptime", uptime)
     draw_field("Host", "127.0.0.0//Lovely Professional University")
     draw_field("Kernel", "Distributed Systems")
-    draw_field("IDE", "VS Code, Cursor, Neovim")
+    draw_field("IDE", "VS Code")
     
     text_y += 5
     draw_field("Languages.Programming", "C++, Python, JavaScript, Java, SQL")
-    draw_field("Languages.Computer", "HTML, CSS, JSON, Markdown, YAML")
-    draw_field("Languages.Real", "English, Hindi, Punjabi")
+    draw_field("Languages.Web", "React, Tailwind, JSON, MongoDB, Express")
+    draw_field("Computer.Core", "OS, Networking, DSA, Cybersecurity")
+    draw_field("Languages.Real", "English, Hindi, Pahadi")
     
     text_y += 5
     draw_field("Hobbies.Software", "Competitive Programming, Web Dev")
