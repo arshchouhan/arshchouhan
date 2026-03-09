@@ -129,11 +129,11 @@ def generate_image(mode="dark"):
         except:
             image_font = ImageFont.load_default()
     else:
-        image_font = ImageFont.truetype(font_path, 16)
+        image_font = ImageFont.truetype(font_path, 20)
 
     # Calculate image size
     img_width = 1200
-    img_height = 600
+    img_height = 750
     img = Image.new('RGB', (img_width, img_height), color=config['bg'])
     draw = ImageDraw.Draw(img)
 
@@ -154,13 +154,13 @@ def generate_image(mode="dark"):
     # Draw ASCII Art column (Inside card)
     x_offset = card_x0 + 30
     y_offset = card_y0 + 40
-    line_height = 20
+    line_height = 26
     
     for i, line in enumerate(ASCII_ART):
         draw.text((x_offset, y_offset + i * line_height), line, font=image_font, fill=config['value'])
 
     # Draw Information column
-    text_x = card_x0 + 430
+    text_x = card_x0 + 480
     text_y = card_y0 + 40
     
     # Header: arshchouhan
@@ -193,7 +193,7 @@ def generate_image(mode="dark"):
         text_y += line_height + 5
 
     # Fields
-    draw_field("OS", "Windows 11, Linux (WSL), Android 14", dots=22)
+    draw_field("OS", "Windows 11, Linux (WSL), Android 15", dots=22)
     draw_field("Uptime", uptime, dots=22)
     draw_field("Host", "arshchouhan/arshchouhan", dots=22)
     draw_field("Kernel", "Digital Explorer & Backend Enthusiast", dots=22)
