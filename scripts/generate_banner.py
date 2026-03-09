@@ -123,17 +123,17 @@ def generate_image(mode="dark"):
         ascii_font = ImageFont.load_default()
         text_font = ImageFont.load_default()
     else:
-        ascii_font = ImageFont.truetype(font_path, 24)
-        text_font = ImageFont.truetype(font_path, 18)
+        ascii_font = ImageFont.truetype(font_path, 18)
+        text_font = ImageFont.truetype(font_path, 14)
 
     # Calculate image size
-    img_width = 1300
-    img_height = 800
+    img_width = 1100
+    img_height = 650
     img = Image.new('RGB', (img_width, img_height), color=config['bg'])
     draw = ImageDraw.Draw(img)
 
     # Draw Card Background with Padding
-    padding = 10
+    padding = 20
     card_x0, card_y0 = padding, padding
     card_x1, card_y1 = img_width - padding, img_height - padding
     
@@ -147,16 +147,16 @@ def generate_image(mode="dark"):
     )
 
     # Draw ASCII Art column (Inside card)
-    x_offset = card_x0 + 20
-    y_offset = card_y0 + 30
-    line_height = 26
+    x_offset = card_x0 + 40
+    y_offset = card_y0 + 50
+    line_height = 20
     
     for i, line in enumerate(ASCII_ART):
         draw.text((x_offset, y_offset + i * line_height), line, font=ascii_font, fill=config['value'])
 
     # Draw Information column
-    text_x = card_x0 + 550
-    text_y = card_y0 + 35
+    text_x = card_x0 + 420
+    text_y = card_y0 + 50
     
     # Header: arshchouhan
     head_text = GITHUB_USERNAME
@@ -181,11 +181,11 @@ def generate_image(mode="dark"):
 
     def draw_separator(label):
         nonlocal text_y
-        text_y += 10
+        text_y += 5
         label_text = f"- {label} "
         draw.text((text_x, text_y), label_text, font=text_font, fill=config['label'])
-        draw.text((text_x + draw.textlength(label_text, font=text_font), text_y), "-" * 30, font=text_font, fill=config['dot'])
-        text_y += line_height + 5
+        draw.text((text_x + draw.textlength(label_text, font=text_font), text_y), "-" * 35, font=text_font, fill=config['dot'])
+        text_y += line_height + 2
 
     # Fields
     draw_field("OS", "Windows 11, Linux (WSL), Android 15")
