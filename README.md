@@ -8,23 +8,18 @@
 
 <div align="center">
 
-<svg width="900" height="6" viewBox="0 0 900 6" xmlns="http://www.w3.org/2000/svg">
-
-<defs>
-<linearGradient id="fadeLine" x1="0%" y1="0%" x2="100%" y2="0%">
-<stop offset="0%" stop-color="#3b82f6" stop-opacity="0"/>
-<stop offset="50%" stop-color="#3b82f6" stop-opacity="1"/>
-<stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
-</linearGradient>
-</defs>
-
-<rect x="-200" y="2" width="200" height="2" fill="url(#fadeLine)">
-<animate attributeName="x"
-values="-200;900;-200"
-dur="4s"
-repeatCount="indefinite"/>
-</rect>
-
+<svg width="100%" height="10" viewBox="0 0 1000 10" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0" />
+      <stop offset="50%" stop-color="#3b82f6" stop-opacity="1" />
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="2" y="4" fill="#334155" rx="1" opacity="0.2"/>
+  <rect x="-300" y="4" width="300" height="2" fill="url(#glow)">
+    <animate attributeName="x" values="-300;1000;-300" dur="4s" repeatCount="indefinite" />
+  </rect>
 </svg>
 
 </div>
