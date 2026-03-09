@@ -48,33 +48,34 @@ def fetch_github_stats():
     
     # Initialize defaults
     followers = 0
-    public_repos = 0
+    owned_repos = 0
+    contributed_repos = 0
     stars = 0
     total_commits = "Unknown"
-    loc_str = "Zero (No Repos)"
+    loc_str = "Unavailable"
 
-    # Get user info
+    # Get user info for followers
     try:
         resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}", headers=headers, timeout=10)
         if resp.status_code == 200:
             user_data = resp.json()
             followers = user_data.get("followers", 0)
-            public_repos = user_data.get("public_repos", 0)
     except Exception as e:
         print(f"Error fetching user data: {e}")
 
-    # Get repos for stars
+    # Get all public repos to distinguish owned vs contributed (forks)
     try:
-        resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100", headers=headers, timeout=10)
+        resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100&type=owner", headers=headers, timeout=10)
         if resp.status_code == 200:
             repos = resp.json()
+            owned_repos = sum(1 for repo in repos if not repo.get("fork"))
+            contributed_repos = sum(1 for repo in repos if repo.get("fork"))
             stars = sum(repo.get("stargazers_count", 0) for repo in repos)
     except Exception as e:
         print(f"Error fetching repo data: {e}")
 
     # Get dynamic commit count via Search API
     try:
-        # q=author:arshchouhan
         commit_resp = requests.get(f"https://api.github.com/search/commits?q=author:{GITHUB_USERNAME}", headers=headers, timeout=10)
         if commit_resp.status_code == 200:
             commit_data = commit_resp.json()
@@ -84,18 +85,26 @@ def fetch_github_stats():
 
     # Get LOC (Lines of Code)
     try:
-        resp = requests.get(LOC_API_URL, timeout=15)
+        # Codetabs can be flaky, try without headers first or simple GET
+        resp = requests.get(LOC_API_URL, timeout=20)
         if resp.status_code == 200:
             loc_data = resp.json()
             if isinstance(loc_data, list):
-                total_loc = sum(item.get("linesOfCode", 0) for item in loc_data)
+                # Filter out the 'Total' entry if it exists or sum others
+                total_loc = sum(item.get("linesOfCode", 0) for item in loc_data if item.get("language") != "Total")
                 loc_str = f"{total_loc:,}"
+            elif isinstance(loc_data, dict) and "Error" in loc_data:
+                loc_str = "N/A"
+        else:
+            loc_str = "N/A"
     except Exception as e:
         print(f"Error fetching LOC data: {e}")
+        loc_str = "N/A"
 
     return {
         "followers": followers,
-        "public_repos": public_repos,
+        "public_repos": owned_repos,
+        "contributed": contributed_repos,
         "stars": stars,
         "commits": total_commits,
         "loc": loc_str
@@ -260,7 +269,7 @@ def generate_image(mode="dark"):
     draw_separator("GitHub Stats")
     
     # Custom Github format: Repos: 40 {Contributed: 5} | Stars: 100
-    repo_line = f"Repos: {stats['public_repos']} {{Contributed: 5+}} | Stars: {stats['stars']}"
+    repo_line = f"Repos: {stats['public_repos']} {{Contributed: {stats['contributed']}}} | Stars: {stats['stars']}"
     draw.text((text_x, text_y), repo_line, font=text_font, fill=config['key'])
     text_y += line_height
     
