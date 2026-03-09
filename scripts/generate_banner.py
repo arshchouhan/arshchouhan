@@ -39,34 +39,47 @@ COLORS_LIGHT = {
 }
 
 # --- Data Fetching ---
+# --- Data Fetching ---
 def fetch_github_stats():
     headers = {}
     if GITHUB_TOKEN:
         headers["Authorization"] = f"token {GITHUB_TOKEN}"
     
-    # Get user info
-    user_data = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}", headers=headers).json()
-    followers = user_data.get("followers", 0)
-    public_repos = user_data.get("public_repos", 0)
-
-    # Get repos for stars and commits (basic approach)
-    repos = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100", headers=headers).json()
-    stars = sum(repo["stargazers_count"] for repo in repos)
-    
-    # Commits is harder via API without exhaustive searching. 
-    # For now, we'll use a placeholder or better yet, total public repos's commit count if feasible
-    # but that's slow. We'll use the user's current 'Total Commits' if we had a better way, 
-    # but for simplicity, let's use a rough estimate or omit if too complex.
-    # Actually, let's just use placeholder 1,200 for now.
+    # Initialize defaults
+    followers = 0
+    public_repos = 0
+    stars = 0
     total_commits = "1,200+" # Placeholder
+    loc_str = "Unknown"
+
+    # Get user info
+    try:
+        resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}", headers=headers)
+        if resp.status_code == 200:
+            user_data = resp.json()
+            followers = user_data.get("followers", 0)
+            public_repos = user_data.get("public_repos", 0)
+    except Exception as e:
+        print(f"Error fetching user data: {e}")
+
+    # Get repos for stars
+    try:
+        resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100", headers=headers)
+        if resp.status_code == 200:
+            repos = resp.json()
+            stars = sum(repo.get("stargazers_count", 0) for repo in repos)
+    except Exception as e:
+        print(f"Error fetching repo data: {e}")
 
     # Get LOC (Lines of Code)
     try:
-        loc_data = requests.get(LOC_API_URL).json()
-        total_loc = sum(item["linesOfCode"] for item in loc_data)
-        loc_str = f"{total_loc:,}"
-    except:
-        loc_str = "Unknown"
+        resp = requests.get(LOC_API_URL, timeout=10)
+        if resp.status_code == 200:
+            loc_data = resp.json()
+            total_loc = sum(item.get("linesOfCode", 0) for item in loc_data)
+            loc_str = f"{total_loc:,}"
+    except Exception as e:
+        print(f"Error fetching LOC data: {e}")
 
     return {
         "followers": followers,
