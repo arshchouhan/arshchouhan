@@ -89,18 +89,20 @@ def image_to_ascii(image_path, width=45):
     # Convert to grayscale
     img = img.convert("L")
 
-    # Crop to square to focus on the face (assuming it's centered)
+    # Zoom in on the face (tighter crop, shifted up)
     w, h = img.size
-    min_dim = min(w, h)
-    left = (w - min_dim) // 2
-    top = (h - min_dim) // 2
-    img = img.crop((left, top, left + min_dim, top + min_dim))
+    crop_size = int(min(w, h) * 0.5)  # Zoom in significantly (50% of image size)
+    left = (w - crop_size) // 2
+    top = int(h * 0.08)               # Start higher up to catch the face
+    img = img.crop((left, top, left + crop_size, top + crop_size))
 
-    # Resize for ASCII width
-    # 1:1 square crop becomes 0.5 height ratio in ASCII due to character dimensions
+    # Enhance contrast for better face details
+    from PIL import ImageEnhance
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(1.5)
+
+    # Resize for ASCII
     new_height = int(width * 0.5)
-    
-    # Cap height to avoid overly long banners
     if new_height > 25:
         new_height = 25
     
