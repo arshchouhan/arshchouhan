@@ -19,7 +19,8 @@ COLORS_DARK = {
     'label': '#d29922', # Orange-ish for headers
     'bracket': '#8b949e',
     'dot': '#30363d',
-    'host': '#3fb950' # Green for name@host
+    'host': '#3fb950', # Green for name@host
+    'white': '#ffffff'
 }
 
 COLORS_LIGHT = {
@@ -29,7 +30,8 @@ COLORS_LIGHT = {
     'label': '#9a6700',
     'bracket': '#57606a',
     'dot': '#d0d7de',
-    'host': '#1a7f37'
+    'host': '#1a7f37',
+    'white': '#24292f' # Using dark color for "white" in light mode for readability
 }
 
 # --- Data Fetching ---
@@ -144,9 +146,9 @@ def generate_image(mode="dark"):
     text_x = 420
     text_y = 30
     
-    # Header: arsh@chouhan
-    head_text = f"{GITHUB_USERNAME}@chouhan"
-    draw.text((text_x, text_y), head_text, font=image_font, fill=config['host'])
+    # Header: arshchouhan
+    head_text = GITHUB_USERNAME
+    draw.text((text_x, text_y), head_text, font=image_font, fill=config['white'])
     draw.text((text_x + draw.textlength(head_text, font=image_font) + 10, text_y), "-" * 40, font=image_font, fill=config['dot'])
     
     text_y += line_height + 5
