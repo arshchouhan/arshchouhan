@@ -16,13 +16,16 @@ COLORS_DARK = {
     'bg': '#0d1117',
     'key': '#58a6ff',
     'value': '#c9d1d9',
-    'label': '#d29922', # Orange-ish for headers
+    'label': '#d29922',
     'bracket': '#8b949e',
     'dot': '#30363d',
-    'host': '#3fb950', # Green for name@host
+    'host': '#3fb950',
     'white': '#ffffff',
-    'card_bg': '#161b22', # Slightly lighter dark for card
-    'border': '#30363d'
+    'card_bg': '#161b22',
+    'border': '#30363d',
+    'green': '#3fb950',
+    'red': '#f85149',
+    'yellow': '#d29922'
 }
 
 COLORS_LIGHT = {
@@ -33,9 +36,12 @@ COLORS_LIGHT = {
     'bracket': '#57606a',
     'dot': '#d0d7de',
     'host': '#1a7f37',
-    'white': '#24292f', # Using dark color for "white" in light mode for readability
-    'card_bg': '#f6f8fa', # Very light grey for card
-    'border': '#d0d7de'
+    'white': '#24292f',
+    'card_bg': '#f6f8fa',
+    'border': '#d0d7de',
+    'green': '#1a7f37',
+    'red': '#cf222e',
+    'yellow': '#9a6700'
 }
 
 # --- Data Fetching ---
@@ -50,17 +56,17 @@ def fetch_github_stats():
     session.headers.update(headers)
 
     # 1. Profile Data
-    public_repos = 0
+    public_repos_total = 0
     followers = 0
     try:
-        user_resp = session.get(f"https://api.github.com/users/{GITHUB_USERNAME}", timeout=10)
-        if user_resp.status_code == 200:
-            data = user_resp.json()
-            public_repos = data.get("public_repos", 0)
+        resp = session.get(f"https://api.github.com/users/{GITHUB_USERNAME}", timeout=10)
+        if resp.status_code == 200:
+            data = resp.json()
+            public_repos_total = data.get("public_repos", 0)
             followers = data.get("followers", 0)
     except: pass
 
-    # 2. Collect all Repos (Pagination)
+    # 2. Pagination for All Repos
     all_repos = []
     page = 1
     while True:
@@ -77,11 +83,11 @@ def fetch_github_stats():
 
     total_stars = 0
     total_commits = 0
-    total_bytes = 0
-    owned_count = 0
+    total_additions = 0
+    total_deletions = 0
     contributed_count = 0
+    owned_count = 0
 
-    # 3. Process Repos
     for r in all_repos:
         is_fork = r.get("fork")
         if is_fork:
@@ -89,41 +95,42 @@ def fetch_github_stats():
         else:
             owned_count += 1
             total_stars += r.get("stargazers_count", 0)
-            
             repo_name = r["name"]
-            # Sum languages for LOC estimate
+            
+            # Commit count per repo for author
             try:
-                lang_resp = session.get(f"https://api.github.com/repos/{GITHUB_USERNAME}/{repo_name}/languages", timeout=8)
-                if lang_resp.status_code == 200:
-                    total_bytes += sum(lang_resp.json().values())
-            except: pass
-
-            # Count author commits per repo
-            try:
-                # Use per_page=1 and check Link header for total
                 comm_url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{repo_name}/commits?author={GITHUB_USERNAME}&per_page=1"
                 comm_resp = session.get(comm_url, timeout=8)
                 if comm_resp.status_code == 200:
                     if "last" in comm_resp.links:
-                        # Parse last page number from link header
                         last_url = comm_resp.links["last"]["url"]
                         total_commits += int(last_url.split("page=")[-1])
                     elif len(comm_resp.json()) > 0:
                         total_commits += 1
             except: pass
 
-    # Approximate LOC from bytes (rough industry avg: 40-50 bytes per line)
-    # Using 45 as a middle ground
-    loc_val = total_bytes // 45
-    loc_str = f"{loc_val:,} Estimated LOC" if loc_val > 0 else "Analysis Pending"
+            # Code Frequency (Additions/Deletions)
+            try:
+                freq_url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{repo_name}/stats/code_frequency"
+                freq_resp = session.get(freq_url, timeout=8)
+                if freq_resp.status_code == 200:
+                    weeks = freq_resp.json()
+                    for w in weeks:
+                        total_additions += w[1]
+                        total_deletions += abs(w[2])
+            except: pass
 
+    net_loc = total_additions - total_deletions
+    
     return {
         "followers": followers,
-        "public_repos": public_repos, # Actual count from profile
+        "public_repos": public_repos_total,
         "contributed": contributed_count,
         "stars": total_stars,
-        "commits": f"{total_commits:,}",
-        "loc": loc_str
+        "commits": total_commits,
+        "loc": net_loc,
+        "additions": total_additions,
+        "deletions": total_deletions
     }
 
 def get_uptime():
@@ -284,19 +291,82 @@ def generate_image(mode="dark"):
 
     draw_separator("GitHub Stats")
     
-    # Custom Github format: Repos: 40 {Contributed: 5} | Stars: 100
-    repo_line = f"Repos: {stats['public_repos']} {{Contributed: {stats['contributed']}}} | Stars: {stats['stars']}"
-    draw.text((text_x, text_y), repo_line, font=text_font, fill=config['key'])
-    text_y += line_height
-    
-    commit_line = f"Commits: {stats['commits']} | Followers: {stats['followers']}"
-    draw.text((text_x, text_y), commit_line, font=text_font, fill=config['key'])
-    text_y += line_height
-    
-    loc_line = f"Lines of Code on GitHub: {stats['loc']}"
-    draw.text((text_x, text_y), loc_line, font=text_font, fill=config['key'])
+    panel_right_x = text_x + 580
+    mid_x = text_x + 280
 
-    # Save
+    def draw_split_stat(label1, val1_prefix, val1_main, val1_extra, label2, val2, y):
+        # Left half
+        draw.text((text_x, y), f"{label1}: ", font=text_font, fill=config['key'])
+        lx = text_x + draw.textlength(f"{label1}: ", font=text_font)
+        
+        # Dots for left half
+        dots_end_lx = mid_x - draw.textlength(f"{val1_prefix}{val1_main} {val1_extra}", font=text_font) - 10
+        if dots_end_lx > lx:
+            dots = "." * int((dots_end_lx - lx) / draw.textlength(".", font=text_font))
+            draw.text((lx, y), dots, font=text_font, fill=config['dot'])
+            lx = mid_x - draw.textlength(f"{val1_prefix}{val1_main} {val1_extra}", font=text_font)
+        
+        draw.text((lx, y), val1_prefix, font=text_font, fill=config['value'])
+        lx += draw.textlength(val1_prefix, font=text_font)
+        draw.text((lx, y), str(val1_main), font=text_font, fill=config['value'])
+        lx += draw.textlength(str(val1_main), font=text_font)
+        draw.text((lx, y), f" {val1_extra}", font=text_font, fill=config['yellow'])
+        
+        # Separator
+        draw.text((mid_x, y), "|", font=text_font, fill=config['white'])
+        
+        # Right half
+        rx_label = mid_x + 15
+        draw.text((rx_label, y), f"{label2}: ", font=text_font, fill=config['key'])
+        rx_dots_start = rx_label + draw.textlength(f"{label2}: ", font=text_font)
+        
+        val2_text = str(val2)
+        val2_w = draw.textlength(val2_text, font=text_font)
+        rx_val_start = panel_right_x - val2_w
+        
+        if rx_val_start > rx_dots_start:
+            dots = "." * int((rx_val_start - 10 - rx_dots_start) / draw.textlength(".", font=text_font))
+            draw.text((rx_dots_start, y), dots, font=text_font, fill=config['dot'])
+            
+        draw.text((rx_val_start, y), val2_text, font=text_font, fill=config['value'])
+
+    # Row 1: Repos and Stars
+    contrib_text = f"{{Contributed: {stats['contributed']}}}"
+    draw_split_stat("Repos", "", stats['public_repos'], contrib_text, "Stars", stats['stars'], text_y)
+    text_y += line_height
+    
+    # Row 2: Commits and Followers
+    draw_split_stat("Commits", "", f"{stats['commits']:,}", "", "Followers", stats['followers'], text_y)
+    text_y += line_height
+    
+    # Row 3: LOC
+    # Lines of Code on GitHub: <total> (<added>++, <removed>--)
+    loc_label = "Lines of Code on GitHub: "
+    draw.text((text_x, text_y), loc_label, font=text_font, fill=config['key'])
+    lx = text_x + draw.textlength(loc_label, font=text_font)
+    
+    # Dots for LOC
+    loc_vals_text = f"{stats['loc']:,} ( {stats['additions']:,}++, {stats['deletions']:,}-- )"
+    dots_end = panel_right_x - draw.textlength(loc_vals_text, font=text_font) - 10
+    if dots_end > lx:
+        dots = "." * int((dots_end - lx) / draw.textlength(".", font=text_font))
+        draw.text((lx, text_y), dots, font=text_font, fill=config['dot'])
+        lx = dots_end + 10
+        
+    draw.text((lx, text_y), f"{stats['loc']:,} ( ", font=text_font, fill=config['value'])
+    lx += draw.textlength(f"{stats['loc']:,} ( ", font=text_font)
+    
+    draw.text((lx, text_y), f"{stats['additions']:,}++", font=text_font, fill=config['green'])
+    lx += draw.textlength(f"{stats['additions']:,}++", font=text_font)
+    
+    draw.text((lx, text_y), ", ", font=text_font, fill=config['value'])
+    lx += draw.textlength(", ", font=text_font)
+    
+    draw.text((lx, text_y), f"{stats['deletions']:,}--", font=text_font, fill=config['red'])
+    lx += draw.textlength(f"{stats['deletions']:,}--", font=text_font)
+    
+    draw.text((lx, text_y), " )", font=text_font, fill=config['value'])
+    text_y += line_height
     output_path = f"assets/banner-{mode}.png"
     os.makedirs("assets", exist_ok=True)
     img.save(output_path)
