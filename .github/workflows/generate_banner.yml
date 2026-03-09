@@ -3,15 +3,16 @@ name: Generate Neofetch Banner
 on:
   schedule:
     - cron: '0 0 * * *' # Run daily at midnight
+  push:
+    branches:
+      - main
   workflow_dispatch: # Allow manual trigger
-
-
-permissions:
-  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,7 +30,7 @@ jobs:
 
       - name: Generate banner images
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: python scripts/generate_banner.py
 
       - name: Commit and push changes
