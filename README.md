@@ -1,47 +1,10 @@
 <div align="center">
 
-<table>
-<tr>
-<td align="left">
-<pre>
-       <b>_..._</b>
-     <b>.'     '.</b>
-    <b>/   _   _ \</b>
-    <b>|  (o) (o) |</b>
-    <b>|    _ _   |</b>
-     <b>\  \_/   /</b>
-      <b>'.___.'</b>
-      <b>/     \</b>
-     <b>/  / \  \</b>
-    <b>/  /   \  \</b>
-    <b>\_/     \_/</b>
-</pre>
-</td>
-<td align="left">
-<pre>
-<b>arsh@chouhan</b>
---------------------------------------------------
-<b>OS</b>: Windows 11
-<b>Host</b>: Profile Repository
-<b>Kernel</b>: Digital Explorer
-<b>IDE</b>: VS Code / Cursor
-
-<b>Languages.Programming</b>: C++, Python, JavaScript, Java, SQL
-<b>Languages.Backend</b>....: Node.js, Express, Firebase, MongoDB
-<b>Cloud.Infra</b>........: AWS, Docker, Git
-
-- Contact ----------------------------------------
-<b>LinkedIn</b>...........: linkedin.com/in/arshchouhan
-<b>Email</b>..............: arshchouhan004@gmail.com
-<b>Location</b>...........: Global Explorer
-
-- GitHub Stats -----------------------------------
-<b>Status</b>.............: Building Scalable Architecture
-<b>Interests</b>..........: Backend & System Design
-</pre>
-</td>
-</tr>
-</table>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/banner-light.png">
+  <img alt="Profile Banner" src="assets/banner-dark.png" width="100%">
+</picture>
 
 </div>
 
