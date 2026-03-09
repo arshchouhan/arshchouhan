@@ -39,75 +39,97 @@ COLORS_LIGHT = {
 }
 
 # --- Data Fetching ---
+# --- Data Fetching ---
 def fetch_github_stats():
+    session = requests.Session()
     headers = {
-        "Accept": "application/vnd.github.v3+json"
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "arshchouhan-banner-generator"
     }
     if GITHUB_TOKEN:
         headers["Authorization"] = f"token {GITHUB_TOKEN}"
-    
-    # Initialize defaults
+    session.headers.update(headers)
+
+    def get_all_repos():
+        repos = []
+        page = 1
+        while True:
+            try:
+                # Use type=owner to get owned repos, or type=all and filter later
+                url = f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100&page={page}"
+                resp = session.get(url, timeout=12)
+                if resp.status_code != 200:
+                    break
+                data = resp.json()
+                if not data:
+                    break
+                repos.extend(data)
+                if "next" not in resp.links:
+                    break
+                page += 1
+            except Exception as e:
+                print(f"Pagination error: {e}")
+                break
+        return repos
+
+    # 1. Basic Stats (Followers)
     followers = 0
-    owned_repos = 0
-    contributed_repos = 0
-    stars = 0
-    total_commits = "Unknown"
-    loc_str = "Unavailable"
-
-    # Get user info for followers
     try:
-        resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}", headers=headers, timeout=10)
-        if resp.status_code == 200:
-            user_data = resp.json()
-            followers = user_data.get("followers", 0)
-    except Exception as e:
-        print(f"Error fetching user data: {e}")
+        user_resp = session.get(f"https://api.github.com/users/{GITHUB_USERNAME}", timeout=10)
+        if user_resp.status_code == 200:
+            followers = user_resp.json().get("followers", 0)
+    except: pass
 
-    # Get all public repos to distinguish owned vs contributed (forks)
-    try:
-        resp = requests.get(f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100&type=owner", headers=headers, timeout=10)
-        if resp.status_code == 200:
-            repos = resp.json()
-            owned_repos = sum(1 for repo in repos if not repo.get("fork"))
-            contributed_repos = sum(1 for repo in repos if repo.get("fork"))
-            stars = sum(repo.get("stargazers_count", 0) for repo in repos)
-    except Exception as e:
-        print(f"Error fetching repo data: {e}")
-
-    # Get dynamic commit count via Search API
-    try:
-        commit_resp = requests.get(f"https://api.github.com/search/commits?q=author:{GITHUB_USERNAME}", headers=headers, timeout=10)
-        if commit_resp.status_code == 200:
-            commit_data = commit_resp.json()
-            total_commits = f"{commit_data.get('total_count', 0):,}"
-    except Exception as e:
-        print(f"Error fetching commit data: {e}")
-
-    # Get LOC (Lines of Code)
-    try:
-        # Codetabs can be flaky, try without headers first or simple GET
-        resp = requests.get(LOC_API_URL, timeout=20)
-        if resp.status_code == 200:
-            loc_data = resp.json()
-            if isinstance(loc_data, list):
-                # Filter out the 'Total' entry if it exists or sum others
-                total_loc = sum(item.get("linesOfCode", 0) for item in loc_data if item.get("language") != "Total")
-                loc_str = f"{total_loc:,}"
-            elif isinstance(loc_data, dict) and "Error" in loc_data:
-                loc_str = "N/A"
+    # 2. Get All Reposities
+    all_repos = get_all_repos()
+    
+    owned_repos_count = 0
+    contributed_count = 0
+    total_stars = 0
+    total_additions = 0
+    total_deletions = 0
+    
+    # Repos: Owned vs Forked
+    for r in all_repos:
+        if r.get("fork"):
+            contributed_count += 1
         else:
-            loc_str = "N/A"
-    except Exception as e:
-        print(f"Error fetching LOC data: {e}")
-        loc_str = "N/A"
+            owned_repos_count += 1
+            total_stars += r.get("stargazers_count", 0)
+            
+            # Fetch LOC stats for owned repos via code_frequency
+            # This can be slow, but it provides the ++/-- format requested
+            try:
+                # GitHub stats are sometimes cached (202), so we'll try once
+                stats_url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{r['name']}/stats/code_frequency"
+                freq_resp = session.get(stats_url, timeout=10)
+                if freq_resp.status_code == 200:
+                    weeks = freq_resp.json()
+                    for week in weeks:
+                        total_additions += week[1]
+                        total_deletions += abs(week[2])
+            except: pass
+
+    # 3. Total Commits (Using Search API is most accurate for global commits)
+    commits_str = "0"
+    try:
+        commit_search_url = f"https://api.github.com/search/commits?q=author:{GITHUB_USERNAME}"
+        commit_resp = session.get(commit_search_url, timeout=12)
+        if commit_resp.status_code == 200:
+            commits_str = f"{commit_resp.json().get('total_count', 0):,}"
+    except: pass
+
+    # Format LOC string matching the reference: 446,276 ( 523,178++, 76,902-- )
+    loc_net = total_additions - total_deletions
+    loc_display = f"{loc_net:,} ( {total_additions:,}++, {total_deletions:,}-- )"
 
     return {
         "followers": followers,
-        "public_repos": owned_repos,
-        "contributed": contributed_repos,
-        "stars": stars,
-        "commits": total_commits,
-        "loc": loc_str
+        "public_repos": owned_repos_count,
+        "contributed": contributed_count,
+        "stars": total_stars,
+        "commits": commits_str,
+        "loc": loc_display
     }
 
 def get_uptime():
