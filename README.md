@@ -31,16 +31,11 @@ repeatCount="indefinite"/>
 
 <br>
 
-<table>
-<tr>
+<div align="center">
 
-<td width="50%">
+<img src="./assets/intro.gif" width="380" align="left" style="margin-right: 20px;">
 
-<img src="./assets/intro.gif" width="100%">
-
-</td>
-
-<td width="50%">
+<div align="left">
 
 <img src="https://readme-typing-svg.herokuapp.com?font=Outfit&size=28&duration=3000&pause=1000&color=4FACFE&vCenter=true&width=500&lines=Backend+and+System+Design+Enthusiast;Cloud+Computing+Explorer;Competitive+Programmer;Full+Stack+Developer"/>
 
@@ -50,10 +45,11 @@ repeatCount="indefinite"/>
 
 I am a passionate software engineer focused on building scalable systems, cloud architectures, and solving complex algorithmic challenges.
 
-</td>
+</div>
 
-</tr>
-</table>
+</div>
+
+<br clear="both">
 
 ---
 
@@ -103,15 +99,12 @@ VS Code
 
 <div align="center">
 
-<img src="https://github-readme-stats.vercel.app/api?username=arshchouhan&show_icons=true&theme=tokyonight&hide_border=true"/>
+<img src="https://github-readme-stats.vercel.app/api?username=arshchouhan&show_icons=true&theme=tokyonight&hide_border=true" height="195" />
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=arshchouhan&layout=compact&theme=tokyonight&hide_border=true" height="195" />
 
 <br>
 
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=arshchouhan&layout=compact&theme=tokyonight&hide_border=true"/>
-
-<br>
-
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=arshchouhan&theme=tokyonight&hide_border=true"/>
+<img src="https://github-readme-streak-stats.herokuapp.com/?user=arshchouhan&theme=tokyonight&hide_border=true" height="195" />
 
 </div>
 
