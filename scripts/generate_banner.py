@@ -39,7 +39,6 @@ COLORS_LIGHT = {
 }
 
 # --- Data Fetching ---
-# --- Data Fetching ---
 def fetch_github_stats():
     session = requests.Session()
     headers = {
@@ -50,86 +49,81 @@ def fetch_github_stats():
         headers["Authorization"] = f"token {GITHUB_TOKEN}"
     session.headers.update(headers)
 
-    def get_all_repos():
-        repos = []
-        page = 1
-        while True:
-            try:
-                # Use type=owner to get owned repos, or type=all and filter later
-                url = f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100&page={page}"
-                resp = session.get(url, timeout=12)
-                if resp.status_code != 200:
-                    break
-                data = resp.json()
-                if not data:
-                    break
-                repos.extend(data)
-                if "next" not in resp.links:
-                    break
-                page += 1
-            except Exception as e:
-                print(f"Pagination error: {e}")
-                break
-        return repos
-
-    # 1. Basic Stats (Followers)
+    # 1. Profile Data
+    public_repos = 0
     followers = 0
     try:
         user_resp = session.get(f"https://api.github.com/users/{GITHUB_USERNAME}", timeout=10)
         if user_resp.status_code == 200:
-            followers = user_resp.json().get("followers", 0)
+            data = user_resp.json()
+            public_repos = data.get("public_repos", 0)
+            followers = data.get("followers", 0)
     except: pass
 
-    # 2. Get All Reposities
-    all_repos = get_all_repos()
-    
-    owned_repos_count = 0
-    contributed_count = 0
+    # 2. Collect all Repos (Pagination)
+    all_repos = []
+    page = 1
+    while True:
+        try:
+            url = f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100&page={page}"
+            resp = session.get(url, timeout=12)
+            if resp.status_code != 200: break
+            data = resp.json()
+            if not data: break
+            all_repos.extend(data)
+            if "next" not in resp.links: break
+            page += 1
+        except: break
+
     total_stars = 0
-    total_additions = 0
-    total_deletions = 0
-    
-    # Repos: Owned vs Forked
+    total_commits = 0
+    total_bytes = 0
+    owned_count = 0
+    contributed_count = 0
+
+    # 3. Process Repos
     for r in all_repos:
-        if r.get("fork"):
+        is_fork = r.get("fork")
+        if is_fork:
             contributed_count += 1
         else:
-            owned_repos_count += 1
+            owned_count += 1
             total_stars += r.get("stargazers_count", 0)
             
-            # Fetch LOC stats for owned repos via code_frequency
-            # This can be slow, but it provides the ++/-- format requested
+            repo_name = r["name"]
+            # Sum languages for LOC estimate
             try:
-                # GitHub stats are sometimes cached (202), so we'll try once
-                stats_url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{r['name']}/stats/code_frequency"
-                freq_resp = session.get(stats_url, timeout=10)
-                if freq_resp.status_code == 200:
-                    weeks = freq_resp.json()
-                    for week in weeks:
-                        total_additions += week[1]
-                        total_deletions += abs(week[2])
+                lang_resp = session.get(f"https://api.github.com/repos/{GITHUB_USERNAME}/{repo_name}/languages", timeout=8)
+                if lang_resp.status_code == 200:
+                    total_bytes += sum(lang_resp.json().values())
             except: pass
 
-    # 3. Total Commits (Using Search API is most accurate for global commits)
-    commits_str = "0"
-    try:
-        commit_search_url = f"https://api.github.com/search/commits?q=author:{GITHUB_USERNAME}"
-        commit_resp = session.get(commit_search_url, timeout=12)
-        if commit_resp.status_code == 200:
-            commits_str = f"{commit_resp.json().get('total_count', 0):,}"
-    except: pass
+            # Count author commits per repo
+            try:
+                # Use per_page=1 and check Link header for total
+                comm_url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{repo_name}/commits?author={GITHUB_USERNAME}&per_page=1"
+                comm_resp = session.get(comm_url, timeout=8)
+                if comm_resp.status_code == 200:
+                    if "last" in comm_resp.links:
+                        # Parse last page number from link header
+                        last_url = comm_resp.links["last"]["url"]
+                        total_commits += int(last_url.split("page=")[-1])
+                    elif len(comm_resp.json()) > 0:
+                        total_commits += 1
+            except: pass
 
-    # Format LOC string matching the reference: 446,276 ( 523,178++, 76,902-- )
-    loc_net = total_additions - total_deletions
-    loc_display = f"{loc_net:,} ( {total_additions:,}++, {total_deletions:,}-- )"
+    # Approximate LOC from bytes (rough industry avg: 40-50 bytes per line)
+    # Using 45 as a middle ground
+    loc_val = total_bytes // 45
+    loc_str = f"{loc_val:,} Estimated LOC" if loc_val > 0 else "Analysis Pending"
 
     return {
         "followers": followers,
-        "public_repos": owned_repos_count,
+        "public_repos": public_repos, # Actual count from profile
         "contributed": contributed_count,
         "stars": total_stars,
-        "commits": commits_str,
-        "loc": loc_display
+        "commits": f"{total_commits:,}",
+        "loc": loc_str
     }
 
 def get_uptime():
